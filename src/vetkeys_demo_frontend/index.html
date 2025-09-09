@@ -1,20 +1,502 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>VetKeys Demo</title>
+    <base href="/" />
+    <link rel="icon" href="favicon.ico" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IC Hello Starter</title>
-</head>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
 
-<body>
-  <div class="browser-warning">
-    ⚠️ If this page appears broken, try reloading. If the problem persists, try switching browsers; Chrome or
-    Firefox are recommended.
-  </div>
-  <div id="root"></div>
-  <script type="module" src="/src/main.js"></script>
-</body>
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
 
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      }
+
+      .header h1 {
+        color: #2c3e50;
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      .header h1 i {
+        color: #3498db;
+      }
+
+      .principal-info {
+        background: linear-gradient(45deg, #3498db, #2980b9);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        display: inline-block;
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+
+      .main-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+
+      .feature-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .feature-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e0e6ed;
+      }
+
+      .feature-header i {
+        font-size: 1.8rem;
+        color: #3498db;
+      }
+
+      .feature-header h2 {
+        color: #2c3e50;
+        font-size: 1.4rem;
+        font-weight: 600;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #34495e;
+        font-size: 0.95rem;
+      }
+
+      input, textarea, button {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e0e6ed;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        font-family: inherit;
+      }
+
+      input:focus, textarea:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      button {
+        background: linear-gradient(45deg, #3498db, #2980b9);
+        color: white;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      button:hover:not(:disabled) {
+        background: linear-gradient(45deg, #2980b9, #1c5985);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+      }
+
+      button:disabled {
+        background: #bdc3c7;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .btn-secondary {
+        background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+      }
+
+      .btn-secondary:hover:not(:disabled) {
+        background: linear-gradient(45deg, #7f8c8d, #6c7b7d);
+      }
+
+      .btn-success {
+        background: linear-gradient(45deg, #27ae60, #229954);
+      }
+
+      .btn-success:hover:not(:disabled) {
+        background: linear-gradient(45deg, #229954, #1e8449);
+      }
+
+      .result-section {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 15px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        word-break: break-all;
+        min-height: 50px;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+
+      .result-section:empty::before {
+        content: "Results will appear here...";
+        color: #6c757d;
+        font-style: italic;
+      }
+
+      .timelock-item {
+        background: white;
+        border: 2px solid #e0e6ed;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 15px 0;
+        transition: all 0.3s ease;
+      }
+
+      .timelock-item.expired {
+        border-color: #27ae60;
+        background: linear-gradient(135deg, #d5f4e6 0%, #fafafa 100%);
+      }
+
+      .timelock-item.locked {
+        border-color: #f39c12;
+        background: linear-gradient(135deg, #fef5e7 0%, #fafafa 100%);
+      }
+
+      .timelock-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 10px;
+      }
+
+      .timelock-meta {
+        font-size: 0.85rem;
+        color: #7f8c8d;
+        margin: 5px 0;
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-top: 10px;
+      }
+
+      .status-expired {
+        background: #d5f4e6;
+        color: #27ae60;
+      }
+
+      .status-locked {
+        background: #fef5e7;
+        color: #f39c12;
+      }
+
+      .quick-decrypt-btn {
+        width: auto;
+        padding: 8px 16px;
+        margin-top: 10px;
+        font-size: 0.85rem;
+      }
+
+      @media (max-width: 768px) {
+        .main-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .header h1 {
+          font-size: 2rem;
+        }
+        
+        .feature-card {
+          padding: 20px;
+        }
+      }
+
+      .loading {
+        display: inline-block;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      .success-message {
+        color: #27ae60;
+        background: #d5f4e6;
+        padding: 10px;
+        border-radius: 8px;
+        border-left: 4px solid #27ae60;
+      }
+
+      .error-message {
+        color: #e74c3c;
+        background: #fdf2f2;
+        padding: 10px;
+        border-radius: 8px;
+        border-left: 4px solid #e74c3c;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <h1>
+          <i class="fas fa-shield-alt"></i>
+          VetKeys Demo
+        </h1>
+        <div class="principal-info" id="principal">
+          Loading...
+        </div>
+      </div>
+
+      <!-- Main Grid -->
+      <div class="main-grid">
+        <!-- Symmetric Key Card -->
+        <div class="feature-card">
+          <div class="feature-header">
+            <i class="fas fa-key"></i>
+            <h2>Symmetric Encryption</h2>
+          </div>
+
+          <form id="get_vetkey_form">
+            <button type="submit">
+              <i class="fas fa-download"></i>
+              Fetch vetKey
+            </button>
+          </form>
+          <div class="result-section" id="get_vetkey_result"></div>
+
+          <div class="form-group">
+            <label for="plaintext">
+              <i class="fas fa-edit"></i> Plaintext:
+            </label>
+            <input
+              type="text"
+              id="plaintext"
+              placeholder="Enter text to encrypt..."
+            />
+          </div>
+
+          <form id="encrypt_form">
+            <button type="submit" id="submit_plaintext" disabled>
+              <i class="fas fa-lock"></i>
+              Encrypt
+            </button>
+          </form>
+          <div class="result-section" id="encrypt_result"></div>
+
+          <div class="form-group">
+            <label for="ciphertext">
+              <i class="fas fa-file-code"></i> Ciphertext:
+            </label>
+            <input
+              type="text"
+              id="ciphertext"
+              placeholder="Paste encrypted text here..."
+            />
+          </div>
+
+          <form id="decrypt_form">
+            <button type="submit" id="submit_ciphertext" disabled>
+              <i class="fas fa-unlock"></i>
+              Decrypt
+            </button>
+          </form>
+          <div class="result-section" id="decrypt_result"></div>
+        </div>
+
+        <!-- IBE Card -->
+        <div class="feature-card">
+          <div class="feature-header">
+            <i class="fas fa-users"></i>
+            <h2>Identity-Based Encryption</h2>
+          </div>
+
+          <div class="form-group">
+            <label for="ibe_plaintext">
+              <i class="fas fa-edit"></i> Message:
+            </label>
+            <input
+              type="text"
+              id="ibe_plaintext"
+              placeholder="Enter message to encrypt..."
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="ibe_principal">
+              <i class="fas fa-user"></i> Recipient Principal:
+            </label>
+            <input
+              type="text"
+              id="ibe_principal"
+              placeholder="Enter principal ID..."
+            />
+          </div>
+
+          <form id="ibe_encrypt_form">
+            <button type="submit" id="ibe_encrypt" disabled>
+              <i class="fas fa-paper-plane"></i>
+              IBE Encrypt
+            </button>
+          </form>
+          <div class="result-section" id="ibe_encrypt_result"></div>
+
+          <div class="form-group">
+            <label for="ibe_ciphertext">
+              <i class="fas fa-file-code"></i> IBE Ciphertext:
+            </label>
+            <input
+              type="text"
+              id="ibe_ciphertext"
+              placeholder="Paste IBE encrypted text here..."
+            />
+          </div>
+
+          <form id="ibe_decrypt_form">
+            <button type="submit" id="ibe_decrypt" disabled>
+              <i class="fas fa-unlock-alt"></i>
+              IBE Decrypt
+            </button>
+          </form>
+          <div class="result-section" id="ibe_decrypt_result"></div>
+        </div>
+
+        <!-- Timelock Card -->
+        <div class="feature-card">
+          <div class="feature-header">
+            <i class="fas fa-clock"></i>
+            <h2>Time-locked Encryption</h2>
+          </div>
+
+          <div class="form-group">
+            <label for="timelock_title">
+              <i class="fas fa-tag"></i> Title:
+            </label>
+            <input
+              type="text"
+              id="timelock_title"
+              placeholder="My secret message"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="timelock_content">
+              <i class="fas fa-message"></i> Secret Message:
+            </label>
+            <textarea
+              id="timelock_content"
+              placeholder="Enter your secret message..."
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="timelock_datetime">
+              <i class="fas fa-calendar-alt"></i> Unlock At:
+            </label>
+            <input type="datetime-local" id="timelock_datetime" />
+          </div>
+
+          <form id="timelock_create_form">
+            <button type="submit" id="create_timelock_btn" disabled>
+              <i class="fas fa-hourglass-start"></i>
+              Create Time-lock
+            </button>
+          </form>
+          <div class="result-section" id="timelock_create_result"></div>
+
+          <form id="timelocks_view_form">
+            <button type="button" id="refresh_timelocks_btn" class="btn-secondary">
+              <i class="fas fa-list"></i>
+              View My Messages
+            </button>
+          </form>
+          <div id="timelocks_list"></div>
+
+          <div class="form-group">
+            <label for="decrypt_timelock_id">
+              <i class="fas fa-fingerprint"></i> Timelock ID:
+            </label>
+            <input
+              type="text"
+              id="decrypt_timelock_id"
+              placeholder="timelock_..."
+            />
+          </div>
+
+          <form id="timelock_decrypt_form">
+            <button type="submit" id="decrypt_timelock_btn" disabled class="btn-success">
+              <i class="fas fa-unlock"></i>
+              Decrypt Message
+            </button>
+          </form>
+          <div class="result-section" id="timelock_decrypt_result"></div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
 </html>

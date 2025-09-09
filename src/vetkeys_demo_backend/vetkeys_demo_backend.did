@@ -1,3 +1,71 @@
+// Types
+type Principal = principal;
+
+type KeyResponse = record {
+  key_hex : text;
+  caller : text;
+};
+
+type ErrorResponse = record {
+  error : text;
+};
+
+type TimelockMessage = record {
+  id : text;
+  creator : Principal;
+  title : text;
+  encrypted_content : text;
+  unlock_timestamp : nat64;
+  timelock_identity : text;
+};
+
+type TimelockInfo = record {
+  id : text;
+  title : text;
+  unlock_timestamp : nat64;
+  is_expired : bool;
+};
+
+// Result types
+type KeyResult = variant {
+  Ok : KeyResponse;
+  Err : ErrorResponse;
+};
+
+type StringResult = variant {
+  Ok : text;
+  Err : text;
+};
+
+type BoolResult = variant {
+  Ok : bool;
+  Err : text;
+};
+
+type TimelockMessageResult = variant {
+  Ok : TimelockMessage;
+  Err : text;
+};
+
+// Service definition
 service : {
-    "greet": (text) -> (text) query;
+  // Symmetric Key
+  "symmetric_key_verification_key": () -> (KeyResult);
+  "encrypted_symmetric_key_for_caller": (vec nat8) -> (KeyResult);
+  
+  // IBE
+  "ibe_encryption_key": () -> (KeyResult);
+  "encrypted_ibe_decryption_key_for_caller": (vec nat8) -> (KeyResult);
+  
+  // TIMELOCK FUNCTIONS
+  // Update functions (can modify state)
+  "timelock_encryption_key": () -> (StringResult);
+  "create_timelock_message": (text, nat64, text) -> (StringResult);
+  "get_timelock_decryption_key": (text, vec nat8) -> (StringResult);
+  "update_timelock_content": (text, text) -> (BoolResult);
+  
+  // Query functions (read-only)
+  "get_my_timelocks": () -> (vec TimelockInfo) query;
+  "get_timelock_content": (text) -> (StringResult) query;
+  "get_timelock_identity": (text) -> (StringResult) query;
 }
