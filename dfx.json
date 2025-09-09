@@ -1,0 +1,27 @@
+{
+  "canisters": {
+    "vetkeys_demo_backend": {
+      "candid": "src/vetkeys_demo_backend/vetkeys_demo_backend.did",
+      "package": "vetkeys_demo_backend",
+      "type": "rust"
+    },
+    "vetkeys_demo_frontend": {
+      "dependencies": [
+        "vetkeys_demo_backend"
+      ],
+      "source": [
+        "src/vetkeys_demo_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "vetkeys_demo_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
