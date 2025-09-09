@@ -97,7 +97,7 @@ DECRYPT (Only after unlock time):
 ### Setup Steps
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone git@github.com:Huygon764/Basic-vetkey.git
 cd vetkeys-demo
 
 # Install frontend dependencies
